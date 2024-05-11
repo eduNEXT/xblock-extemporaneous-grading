@@ -18,6 +18,4 @@ class TestXBlockExtemporaneousGrading(TestCase):
         frag = block.student_view()
         as_dict = frag.to_dict()
         content = as_dict['content']
-        self.assertIn(
-            'XBlockExtemporaneousGrading: count is now', content, 'XBlock did not render correct student view'
-        )
+        self.assertIn('<div class="extemporaneous_grading_block"></div>', content)

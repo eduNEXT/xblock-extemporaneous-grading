@@ -1,9 +1,1 @@
 /* CSS for XBlockExtemporaneousGrading */
-
-.extemporaneous_grading_block .count {
-    font-weight: bold;
-}
-
-.extemporaneous_grading_block p {
-    cursor: pointer;
-}
