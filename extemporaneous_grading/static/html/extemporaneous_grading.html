@@ -1,1 +1,7 @@
-<div class="extemporaneous_grading_block"></div>
+<div class="extemporaneous_grading_block">
+    {% for child_content in children_contents %}
+        {{ child_content|safe }}
+        <br />
+        <hr />
+    {% endfor %}
+</div>

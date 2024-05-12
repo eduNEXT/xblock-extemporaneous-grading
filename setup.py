@@ -154,7 +154,7 @@ setup(
     author_email='technical@edunext.co',
     url='https://github.com/edunext/xblock-extemporaneous-grading',
     packages=find_packages(
-        include=['extemporaneous_grading', 'extemporaneous_grading.*'],
+        include=['extemporaneous_grading', 'extemporaneous_grading.*', '*.html'],
         exclude=["*tests"],
     ),
 
