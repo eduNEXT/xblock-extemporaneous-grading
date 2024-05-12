@@ -1,4 +1,4 @@
-"""Extemporaneous Grading XBlock"""
+"""Extemporaneous Grading XBlock."""
 
 from __future__ import annotations
 
@@ -23,8 +23,10 @@ loader = ResourceLoader(__name__)
 @XBlock.needs("i18n")
 class XBlockExtemporaneousGrading(StudioContainerWithNestedXBlocksMixin, StudioEditableXBlockMixin, XBlock):
     """
-    Extemporaneous Grading XBlock which provides a way to display content to students
-    according to dates set as due date and late submission date.
+    Extemporaneous Grading XBlock.
+
+    This XBlock provides a way to display content to students according to dates
+    set as due date and late submission date.
     """
 
     CATEGORY = "extemporaneous_grading"
@@ -40,8 +42,16 @@ class XBlockExtemporaneousGrading(StudioContainerWithNestedXBlocksMixin, StudioE
         "display_name",
     ]
 
-    def resource_string(self, path) -> str:
-        """Handy helper for getting resources from our kit."""
+    def resource_string(self, path: str) -> str:
+        """
+        Handy helper for getting resources from our kit.
+
+        Args:
+            path (str): The path to the resource.
+
+        Returns:
+            str: The resource as a string.
+        """
         data = pkg_resources.resource_string(__name__, path)
         return data.decode("utf8")
 
@@ -106,7 +116,7 @@ class XBlockExtemporaneousGrading(StudioContainerWithNestedXBlocksMixin, StudioE
 
         return fragment
 
-    def student_view(self, context=None) -> Fragment:
+    def student_view(self, context: Optional[dict] = None) -> Fragment:
         """
         Create primary view of the XBlockExtemporaneousGrading, shown to students when viewing courses.
         """
