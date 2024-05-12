@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := help
 
 .PHONY: dev.clean dev.build dev.run upgrade help requirements
-.PHONY: extract_translations compile_translations
+.PHONY: extract_translations compile_translations symlink_translations
 .PHONY: detect_changed_source_translations dummy_translations build_dummy_translations
 .PHONY: validate_translations pull_translations push_translations install_transifex_clients
 .PHONY: test format coverage quality diff_cover clean validate
@@ -10,6 +10,8 @@ BROWSER := python -m webbrowser file://$(CURDIR)
 REPO_NAME := xblock-extemporaneous-grading
 PACKAGE_NAME := extemporaneous_grading
 JS_TARGET := $(PACKAGE_NAME)/public/js/translations
+TRANSLATIONS_DIR := $(PACKAGE_NAME)/translations
+LOCALES := en es_ES
 SOURCES=./setup.py ./$(PACKAGE_NAME)
 BLACK_OPTS = --exclude ${SOURCES}
 
@@ -89,12 +91,22 @@ validate: quality test ## Run tests and quality checks
 
 ## Localization targets
 
-extract_translations: ## extract strings to be translated, outputting .po files
-	cd $(PACKAGE_NAME) && i18n_tool extract --no-segment --merge-po-files
-	mv $(EXTRACT_DIR)/django.po $(EXTRACT_DIR)/text.po
+symlink_translations:
+	if [ ! -d "$(TRANSLATIONS_DIR)" ]; then ln -s locale/ $(TRANSLATIONS_DIR); fi
 
-compile_translations: ## compile translation files, outputting .mo files for each supported language
-	cd $(PACKAGE_NAME) && i18n_tool generate
+rename_po_files: ## Rename .po files to django.po
+	for locale in $(LOCALES); do \
+        mv $(PACKAGE_NAME)/locale/$$locale/LC_MESSAGES/text.po $(PACKAGE_NAME)/locale/$$locale/LC_MESSAGES/django.po; \
+    done
+
+extract_translations: symlink_translations rename_po_files ## Extract strings to be translated, outputting .po files
+	for locale in $(LOCALES); do \
+        cd $(PACKAGE_NAME) && django-admin makemessages -l $$locale -v1 -d django --no-obsolete && cd ..; \
+		mv $(PACKAGE_NAME)/locale/$$locale/LC_MESSAGES/django.po $(PACKAGE_NAME)/locale/$$locale/LC_MESSAGES/text.po; \
+    done
+
+compile_translations: symlink_translations ## Compile translation files, outputting .mo files for each supported language
+	cd $(PACKAGE_NAME) && i18n_tool generate -v
 	python manage.py compilejsi18n --namespace ExtemporaneousGradingI18n --output $(JS_TARGET)
 
 detect_changed_source_translations:
@@ -112,6 +124,8 @@ pull_translations: ## pull translations from transifex
 
 push_translations: extract_translations ## push translations to transifex
 	cd $(PACKAGE_NAME) && i18n_tool transifex push
+
+check_translations_up_to_date: extract_translations compile_translations detect_changed_source_translations ## Extract, compile, and check if translation files are up-to-date
 
 install_transifex_client: ## Install the Transifex client
 	# Instaling client will skip CHANGELOG and LICENSE files from git changes

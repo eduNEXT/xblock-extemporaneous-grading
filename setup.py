@@ -177,6 +177,6 @@ setup(
             'extemporaneous_grading = extemporaneous_grading:XBlockExtemporaneousGrading',
         ]
     },
-    package_data=package_data("extemporaneous_grading", ["static", "public"]),
+    package_data=package_data("extemporaneous_grading", ["static", "public", "translations"]),
 
 )
