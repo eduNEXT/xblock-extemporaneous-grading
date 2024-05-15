@@ -92,7 +92,7 @@ validate: quality test ## Run tests and quality checks
 ## Localization targets
 
 symlink_translations:
-	if [ ! -d "$(TRANSLATIONS_DIR)" ]; then ln -s locale/ $(TRANSLATIONS_DIR); fi
+	if [ ! -d "$(TRANSLATIONS_DIR)" ]; then ln -s conf/locale/ $(TRANSLATIONS_DIR); fi
 
 rename_po_files: ## Rename .po files to django.po
 	for locale in $(LOCALES); do \
