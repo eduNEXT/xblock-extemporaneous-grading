@@ -4,3 +4,5 @@ include README.rst
 include requirements/base.in
 include requirements/constraints.txt
 recursive-include extemporaneous_grading *.html *.png *.gif *.js *.css *.jpg *.jpeg *.svg
+recursive-include extemporaneous_grading/locale *.po
+recursive-include extemporaneous_grading/locale *.mo
