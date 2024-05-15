@@ -3,24 +3,30 @@
 from __future__ import annotations
 
 import logging
+import re
+from datetime import datetime
 from typing import Optional
 
 import pkg_resources
-from django.utils import translation
+from django.utils import timezone, translation
 from web_fragments.fragment import Fragment
 from xblock.core import XBlock
-from xblock.fields import Scope, String
+from xblock.exceptions import JsonHandlerError
+from xblock.fields import Boolean, DateTime, JSONField, Scope, String
 from xblock.utils.resources import ResourceLoader
-from xblock.utils.studio_editable import StudioContainerWithNestedXBlocksMixin, StudioEditableXBlockMixin
+from xblock.utils.studio_editable import FutureFields, StudioContainerWithNestedXBlocksMixin, StudioEditableXBlockMixin
 from xblock.utils.studio_editable import loader as studio_loader
+from xblock.validation import Validation
 
 from extemporaneous_grading.utils import _
 
 log = logging.getLogger(__name__)
 loader = ResourceLoader(__name__)
 
+TIME_PATTERN = r"^([01][0-9]|2[0-3]):[0-5][0-9]$"
 
-@XBlock.needs("i18n")
+
+@XBlock.needs("i18n", "call_to_action")
 class XBlockExtemporaneousGrading(StudioContainerWithNestedXBlocksMixin, StudioEditableXBlockMixin, XBlock):
     """
     Extemporaneous Grading XBlock.
@@ -38,8 +44,71 @@ class XBlockExtemporaneousGrading(StudioContainerWithNestedXBlocksMixin, StudioE
         default=_("Extemporaneous Grading"),
     )
 
+    due_date = DateTime(
+        display_name=_("Due Date"),
+        help=_(
+            "The due date for this component. If the learner access before this date, "
+            "the learner will see the content without any restrictions."
+        ),
+        scope=Scope.settings,
+        default=datetime.now(),
+    )
+
+    due_time = String(
+        display_name=_("Due Time (UTC)"),
+        help=_("The time of the due date. The valid format is HH:MM."),
+        scope=Scope.settings,
+        default="00:00",
+    )
+
+    late_due_date = DateTime(
+        display_name=_("Late Due Date"),
+        help=_(
+            "The late due date for this component. If the learner access after the due date "
+            "and before the late due date, the learner will see a message that the submission "
+            "is late. If the learner accepts the late submission pressing the button, the "
+            "learner will see the content."
+        ),
+        scope=Scope.settings,
+        default=datetime.now(),
+    )
+
+    late_due_time = String(
+        display_name=_("Late Due Time (UTC)"),
+        help=_("The time of the late due date. The valid format is HH:MM."),
+        scope=Scope.settings,
+        default="00:00",
+    )
+
+    due_date_explanation_text = String(
+        display_name=_("Due Date Explanation Text"),
+        help=_("The explanation text that will be shown to the learner when the due date is passed."),
+        scope=Scope.settings,
+        default=_("If you would like to submit a late submission, please click the button below."),
+    )
+
+    late_due_date_explanation_text = String(
+        display_name=_("Late Due Date Explanation Text"),
+        help=_("The explanation text that will be shown to the learner when the late due date is passed."),
+        scope=Scope.settings,
+        default=_("You can no longer submit this assignment. The due date has passed."),
+    )
+
+    is_late_submission = Boolean(
+        display_name=_("Is Late Submission"),
+        help=_("Flag to indicate if the submission is late."),
+        scope=Scope.user_state,
+        default=False,
+    )
+
     editable_fields = [
         "display_name",
+        "due_date",
+        "due_time",
+        "late_due_date",
+        "late_due_time",
+        "due_date_explanation_text",
+        "late_due_date_explanation_text",
     ]
 
     def resource_string(self, path: str) -> str:
@@ -73,6 +142,12 @@ class XBlockExtemporaneousGrading(StudioContainerWithNestedXBlocksMixin, StudioE
     def author_view(self, context: dict) -> Fragment:
         """
         Render the Studio preview by rendering each child so that they can all be seen and edited.
+
+        Args:
+            context (dict): The context to render in the template
+
+        Returns:
+            Fragment: The fragment to be rendered
         """
         fragment = Fragment()
         root_xblock = context.get("root_xblock")
@@ -88,6 +163,12 @@ class XBlockExtemporaneousGrading(StudioContainerWithNestedXBlocksMixin, StudioE
     def studio_view(self, context: dict) -> Fragment:
         """
         Render a form for editing this XBlock.
+
+        Args:
+            context (dict): The context to render in the template
+
+        Returns:
+            Fragment: The fragment to be rendered
         """
         fragment = Fragment()
         context = {"fields": []}
@@ -118,29 +199,162 @@ class XBlockExtemporaneousGrading(StudioContainerWithNestedXBlocksMixin, StudioE
 
     def student_view(self, context: Optional[dict] = None) -> Fragment:
         """
-        Create primary view of the XBlockExtemporaneousGrading, shown to students when viewing courses.
+        View for students according to the due date and late due date.
+
+        If the due date did not pass, the student can see children blocks.
+        If the due date passed, the student can accept late submission and see children blocks.
+        If the late due date passed, the student can not see the children blocks.
+
+        Args:
+            context (dict, optional): The context to render in the template
+
+        Returns:
+            Fragment: The fragment to be rendered
         """
         fragment = Fragment()
         children_contents = []
-
-        for child_id in self.children:
-            child = self.runtime.get_block(child_id)
-            child_fragment = self._render_child_fragment(child, context, "student_view")
-            fragment.add_fragment_resources(child_fragment)
-            children_contents.append(child_fragment.content)
-
         render_context = {
             "block": self,
-            "children_contents": children_contents,
+            "due_datetime": self.due_datetime.isoformat(),
+            "late_due_datetime": self.late_due_datetime.isoformat(),
             **context,
         }
 
-        fragment.add_content(self.render_template("static/html/extemporaneous_grading.html", render_context))
+        if (template_name := self.get_template()) == "children":
+            for child_id in self.children:
+                child = self.runtime.get_block(child_id)
+                child_fragment = self._render_child_fragment(child, context, "student_view")
+                fragment.add_fragment_resources(child_fragment)
+                children_contents.append(child_fragment.content)
+
+            render_context.update({"children_contents": children_contents})
+
+        # Add i18n js
+        statici18n_js_url = self._get_statici18n_js_url()
+        if statici18n_js_url:
+            fragment.add_javascript_url(self.runtime.local_resource_url(self, statici18n_js_url))
+
+        fragment.add_content(self.render_template(f"static/html/{template_name}.html", render_context))
         fragment.add_css(self.resource_string("static/css/extemporaneous_grading.css"))
         fragment.add_javascript(self.resource_string("static/js/src/extemporaneous_grading.js"))
+        fragment.add_javascript(self.resource_string("static/js/src/resize_iframe.js"))
         fragment.initialize_js("XBlockExtemporaneousGrading")
 
         return fragment
+
+    def get_template(self) -> str:
+        """
+        Get the template name based on the current datetime.
+
+        Returns:
+            str: The template name.
+        """
+        current_datetime = timezone.now()
+        if current_datetime > self.late_due_datetime:
+            return "late_due_datetime"
+        if self.due_datetime < current_datetime < self.late_due_datetime and not self.is_late_submission:
+            return "due_datetime"
+        return "children"
+
+    @property
+    def due_datetime(self) -> datetime:
+        """
+        Get the due date as a datetime object.
+
+        Returns:
+            datetime: The due date.
+        """
+        return self.parse_datetime(self.due_date, self.due_time)
+
+    @property
+    def late_due_datetime(self) -> datetime:
+        """
+        Get the late due date as a datetime object.
+
+        Returns:
+            datetime: The late due date.
+        """
+        return self.parse_datetime(self.late_due_date, self.late_due_time)
+
+    @staticmethod
+    def parse_datetime(date: datetime, time: str) -> datetime:
+        """
+        Parse a datetime object from a date and time string.
+
+        Args:
+            date (datetime): The date object.
+            time (str): The time string in the format HH:MM.
+
+        Returns:
+            datetime: The datetime object.
+        """
+        time = datetime.strptime(time, "%H:%M").time()
+        return datetime.combine(date, time).replace(tzinfo=timezone.utc)
+
+    @XBlock.json_handler
+    def late_submission(self, data: dict, suffix: str = "") -> dict:  # pylint: disable=unused-argument
+        """
+        Set the late submission flag to True.
+
+        Args:
+            data (dict): The data received from the client.
+            suffix (str, optional): The suffix of the handler.
+
+        Returns:
+            dict: The response to the client.
+        """
+        self.is_late_submission = True
+        return {
+            "success": True,
+        }
+
+    @staticmethod
+    def validate_time(time: Optional[str]) -> None:
+        """
+        Validate the time format.
+
+        Args:
+            time (str, optional): The time string to validate.
+
+        Raises:
+            JsonHandlerError: If the time format is invalid.
+        """
+        if time and not re.match(TIME_PATTERN, time):
+            raise JsonHandlerError(400, _("Invalid time format. The valid format is HH:MM."))
+
+    @XBlock.json_handler
+    def submit_studio_edits(self, data: dict, suffix: str = ""):
+        """
+        AJAX handler for studio_view() Save button
+        """
+        self.validate_time(data["values"].get("due_time"))
+        self.validate_time(data["values"].get("late_due_time"))
+
+        values = {}  # dict of new field values we are updating
+        to_reset = []  # list of field names to delete from this XBlock
+        for field_name in self.editable_fields:
+            field = self.fields[field_name]
+            if field_name in data["values"]:
+                if isinstance(field, JSONField):
+                    values[field_name] = field.from_json(data["values"][field_name])
+                else:
+                    raise JsonHandlerError(400, f"Unsupported field type: {field_name}")
+            elif field_name in data["defaults"] and field.is_set_on(self):
+                to_reset.append(field_name)
+        self.clean_studio_edits(values)
+        validation = Validation(self.scope_ids.usage_id)
+        # We cannot set the fields on self yet, because even if validation fails, studio is going to save any changes we
+        # make. So we create a "fake" object that has all the field values we are about to set.
+        preview_data = FutureFields(new_fields_dict=values, newly_removed_fields=to_reset, fallback_obj=self)
+        self.validate_field_data(validation, preview_data)
+        if validation:
+            for field_name, value in values.items():
+                setattr(self, field_name, value)
+            for field_name in to_reset:
+                self.fields[field_name].delete_from(self)
+            return {"result": "success"}
+        else:
+            raise JsonHandlerError(400, validation.to_json())
 
     @staticmethod
     def workbench_scenarios() -> list:  # pragma: no cover

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-12 00:40-0500\n"
+"POT-Creation-Date: 2024-05-15 00:00-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,14 +17,116 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: extemporaneous_grading.py:33
+#: extemporaneous_grading.py:41
 msgid "Display Name"
 msgstr "Nombre a mostrar"
 
-#: extemporaneous_grading.py:34
+#: extemporaneous_grading.py:42
 msgid "The display name for this component."
 msgstr "El nombre a mostrar para este componente."
 
-#: extemporaneous_grading.py:36
+#: extemporaneous_grading.py:44
 msgid "Extemporaneous Grading"
 msgstr "Calificación Extemporánea"
+
+#: extemporaneous_grading.py:48
+msgid "Due Date"
+msgstr "Fecha de Entrega"
+
+#: extemporaneous_grading.py:50
+msgid ""
+"The due date for this component. If the learner access before this date, the "
+"learner will see the content without any restrictions."
+msgstr ""
+"La fecha de entrega para este componente. Si el estudiante accede antes de "
+"esta fecha, verá el contenido sin restricciones."
+
+#: extemporaneous_grading.py:58
+msgid "Due Time (UTC)"
+msgstr "Hora de Entrega (UTC)"
+
+#: extemporaneous_grading.py:59
+msgid "The time of the due date. The valid format is HH:MM."
+msgstr "La hora de la fecha de entrega. El formato válido es HH:MM."
+
+#: extemporaneous_grading.py:65
+msgid "Late Due Date"
+msgstr "Fecha de Entrega Tardía"
+
+#: extemporaneous_grading.py:67
+msgid ""
+"The late due date for this component. If the learner access after the due "
+"date and before the late due date, the learner will see a message that the "
+"submission is late. If the learner accepts the late submission pressing the "
+"button, the learner will see the content."
+msgstr ""
+"La fecha de entrega tardía para este componente. Si el estudiante accede "
+"después de la fecha de entrega y antes de la fecha de entrega tardía, verá "
+"un mensaje que la entrega es tardía. Si el estudiante acepta la entrega "
+"tardía presionando el botón, verá el contenido."
+
+#: extemporaneous_grading.py:77
+msgid "Late Due Time (UTC)"
+msgstr "Hora de Entrega Tardía (UTC)"
+
+#: extemporaneous_grading.py:78
+msgid "The time of the late due date. The valid format is HH:MM."
+msgstr "La hora de la fecha de entrega tardía. El formato válido es HH:MM."
+
+#: extemporaneous_grading.py:84
+msgid "Due Date Explanation Text"
+msgstr "Texto Explicativo de la Fecha de Entrega"
+
+#: extemporaneous_grading.py:85
+msgid ""
+"The explanation text that will be shown to the learner when the due date is "
+"passed."
+msgstr ""
+"El texto explicativo que se mostrará al estudiante cuando la fecha de "
+"entrega haya pasado."
+
+#: extemporaneous_grading.py:87
+msgid ""
+"If you would like to submit a late submission, please click the button below."
+msgstr ""
+"Si desea enviar una entrega tardía, por favor haga clic en el botón de abajo."
+
+#: extemporaneous_grading.py:91
+msgid "Late Due Date Explanation Text"
+msgstr "Texto Explicativo de la Fecha de Entrega Tardía"
+
+#: extemporaneous_grading.py:92
+msgid ""
+"The explanation text that will be shown to the learner when the late due "
+"date is passed."
+msgstr ""
+"El texto explicativo que se mostrará al estudiante cuando la fecha de "
+"entrega tardía haya pasado."
+
+#: extemporaneous_grading.py:94
+msgid "You can no longer submit this assignment. The due date has passed."
+msgstr "Ya no puede enviar esta tarea. La fecha de entrega ha pasado."
+
+#: extemporaneous_grading.py:98
+msgid "Is Late Submission"
+msgstr "Es Entrega Tardía"
+
+#: extemporaneous_grading.py:99
+msgid "Flag to indicate if the submission is late."
+msgstr "Bandera para indicar si la entrega es tardía."
+
+#: extemporaneous_grading.py:323
+msgid "Invalid time format. The valid format is HH:MM."
+msgstr "Formato de hora inválido. El formato válido es HH:MM."
+
+#: static/html/children.html:4
+msgid "Due Date: "
+msgstr "Fecha de Entrega: "
+
+#: static/html/children.html:5
+msgid "Late Due Date: "
+msgstr "Fecha de Entrega Tardía: "
+
+#: static/html/due_datetime.html:4
+msgid "Accept Late Submission"
+msgstr "Aceptar Entrega Tardía"
