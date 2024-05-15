@@ -204,4 +204,4 @@ class TestXBlockExtemporaneousGrading(TestCase):
 
         self.assertEqual(self.block.is_late_submission, True)
         self.assertEqual(response.status_code, HTTPStatus.OK)
-        self.assertEqual(response.json, {"success": True})
+        self.assertEqual(response.json, {"success": True})  # pylint: disable=no-member

@@ -329,7 +329,7 @@ class XBlockExtemporaneousGrading(StudioContainerWithNestedXBlocksMixin, StudioE
     @XBlock.json_handler
     def submit_studio_edits(self, data: dict, suffix: str = ""):  # pragma: no cover
         """
-        AJAX handler for studio_view() Save button
+        AJAX handler for studio_view() Save button.
         """
         self.validate_time(data["values"].get("due_time"))
         self.validate_time(data["values"].get("late_due_time"))
@@ -337,7 +337,7 @@ class XBlockExtemporaneousGrading(StudioContainerWithNestedXBlocksMixin, StudioE
         values = {}  # dict of new field values we are updating
         to_reset = []  # list of field names to delete from this XBlock
         for field_name in self.editable_fields:
-            field = self.fields[field_name]
+            field = self.fields[field_name]  # pylint: disable=unsubscriptable-object
             if field_name in data["values"]:
                 if isinstance(field, JSONField):
                     values[field_name] = field.from_json(data["values"][field_name])
@@ -355,7 +355,7 @@ class XBlockExtemporaneousGrading(StudioContainerWithNestedXBlocksMixin, StudioE
             for field_name, value in values.items():
                 setattr(self, field_name, value)
             for field_name in to_reset:
-                self.fields[field_name].delete_from(self)
+                self.fields[field_name].delete_from(self)  # pylint: disable=unsubscriptable-object
             return {"result": "success"}
         else:
             raise JsonHandlerError(400, validation.to_json())
