@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-15 00:00-0500\n"
+"POT-Creation-Date: 2024-05-15 14:12-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -77,34 +77,37 @@ msgid ""
 "passed."
 msgstr ""
 
-#: extemporaneous_grading.py:87
+#: extemporaneous_grading.py:88
 msgid ""
-"If you would like to submit a late submission, please click the button below."
+"The due date has passed. You can still submit this assignment until the late "
+"due date. After the late due date, you will not be able to submit this "
+"assignment. If you accept the late submission, press the button."
 msgstr ""
 
-#: extemporaneous_grading.py:91
+#: extemporaneous_grading.py:95
 msgid "Late Due Date Explanation Text"
 msgstr ""
 
-#: extemporaneous_grading.py:92
+#: extemporaneous_grading.py:96
 msgid ""
 "The explanation text that will be shown to the learner when the late due "
 "date is passed."
 msgstr ""
 
-#: extemporaneous_grading.py:94
-msgid "You can no longer submit this assignment. The due date has passed."
+#: extemporaneous_grading.py:98
+msgid ""
+"The late due date has passed. You can not submit this assignment anymore."
 msgstr ""
 
-#: extemporaneous_grading.py:98
+#: extemporaneous_grading.py:102
 msgid "Is Late Submission"
 msgstr ""
 
-#: extemporaneous_grading.py:99
+#: extemporaneous_grading.py:103
 msgid "Flag to indicate if the submission is late."
 msgstr ""
 
-#: extemporaneous_grading.py:323
+#: extemporaneous_grading.py:327
 msgid "Invalid time format. The valid format is HH:MM."
 msgstr ""
 

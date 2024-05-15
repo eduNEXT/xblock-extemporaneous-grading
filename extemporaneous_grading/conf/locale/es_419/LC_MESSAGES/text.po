@@ -85,17 +85,21 @@ msgstr ""
 "El texto explicativo que se mostrará al estudiante cuando la fecha de "
 "entrega haya pasado."
 
-#: extemporaneous_grading.py:87
+#: extemporaneous_grading.py:88
 msgid ""
-"If you would like to submit a late submission, please click the button below."
+"The due date has passed. You can still submit this assignment until the late "
+"due date. After the late due date, you will not be able to submit this "
+"assignment. If you accept the late submission, press the button."
 msgstr ""
-"Si desea enviar una entrega tardía, por favor haga clic en el botón de abajo."
+"La fecha de entrega ha pasado. Aún puedes entregar esta tarea hasta la fecha "
+"de entrega tardía. Después de la fecha de entrega tardía, no podrás entregar "
+"esta tarea. Si aceptas la entrega tardía, presiona el botón."
 
-#: extemporaneous_grading.py:91
+#: extemporaneous_grading.py:95
 msgid "Late Due Date Explanation Text"
 msgstr "Texto Explicativo de la Fecha de Entrega Tardía"
 
-#: extemporaneous_grading.py:92
+#: extemporaneous_grading.py:96
 msgid ""
 "The explanation text that will be shown to the learner when the late due "
 "date is passed."
@@ -103,19 +107,21 @@ msgstr ""
 "El texto explicativo que se mostrará al estudiante cuando la fecha de "
 "entrega tardía haya pasado."
 
-#: extemporaneous_grading.py:94
-msgid "You can no longer submit this assignment. The due date has passed."
-msgstr "Ya no puede enviar esta tarea. La fecha de entrega ha pasado."
-
 #: extemporaneous_grading.py:98
+msgid ""
+"The late due date has passed. You can not submit this assignment anymore."
+msgstr ""
+"La fecha de entrega tardía ha pasado. Ya no puedes entregar esta tarea."
+
+#: extemporaneous_grading.py:102
 msgid "Is Late Submission"
 msgstr "Es Entrega Tardía"
 
-#: extemporaneous_grading.py:99
+#: extemporaneous_grading.py:103
 msgid "Flag to indicate if the submission is late."
 msgstr "Bandera para indicar si la entrega es tardía."
 
-#: extemporaneous_grading.py:323
+#: extemporaneous_grading.py:327
 msgid "Invalid time format. The valid format is HH:MM."
 msgstr "Formato de hora inválido. El formato válido es HH:MM."
 

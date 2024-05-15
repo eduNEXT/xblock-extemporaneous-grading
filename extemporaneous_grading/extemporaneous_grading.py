@@ -84,14 +84,18 @@ class XBlockExtemporaneousGrading(StudioContainerWithNestedXBlocksMixin, StudioE
         display_name=_("Due Date Explanation Text"),
         help=_("The explanation text that will be shown to the learner when the due date is passed."),
         scope=Scope.settings,
-        default=_("If you would like to submit a late submission, please click the button below."),
+        default=_(
+            "The due date has passed. You can still submit this assignment until the "
+            "late due date. After the late due date, you will not be able to submit "
+            "this assignment. If you accept the late submission, press the button."
+        ),
     )
 
     late_due_date_explanation_text = String(
         display_name=_("Late Due Date Explanation Text"),
         help=_("The explanation text that will be shown to the learner when the late due date is passed."),
         scope=Scope.settings,
-        default=_("You can no longer submit this assignment. The due date has passed."),
+        default=_("The late due date has passed. You can not submit this assignment anymore."),
     )
 
     is_late_submission = Boolean(
