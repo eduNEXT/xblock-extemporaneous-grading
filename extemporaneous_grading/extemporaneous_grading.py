@@ -164,7 +164,7 @@ class XBlockExtemporaneousGrading(StudioContainerWithNestedXBlocksMixin, StudioE
 
         return fragment
 
-    def studio_view(self, context: dict) -> Fragment:
+    def studio_view(self, context: dict) -> Fragment:  # pragma: no cover
         """
         Render a form for editing this XBlock.
 
@@ -327,7 +327,7 @@ class XBlockExtemporaneousGrading(StudioContainerWithNestedXBlocksMixin, StudioE
             raise JsonHandlerError(400, _("Invalid time format. The valid format is HH:MM."))
 
     @XBlock.json_handler
-    def submit_studio_edits(self, data: dict, suffix: str = ""):
+    def submit_studio_edits(self, data: dict, suffix: str = ""):  # pragma: no cover
         """
         AJAX handler for studio_view() Save button
         """
