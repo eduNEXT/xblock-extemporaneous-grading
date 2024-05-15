@@ -16,7 +16,7 @@ asgiref==3.8.1
     # via
     #   -r requirements/test.txt
     #   django
-astroid==3.1.0
+astroid==3.2.0
     # via
     #   pylint
     #   pylint-celery
@@ -29,11 +29,11 @@ binaryornot==0.4.4
     # via
     #   -r requirements/test.txt
     #   cookiecutter
-boto3==1.34.103
+boto3==1.34.106
     # via
     #   -r requirements/test.txt
     #   fs-s3fs
-botocore==1.34.103
+botocore==1.34.106
     # via
     #   -r requirements/test.txt
     #   boto3
@@ -71,6 +71,8 @@ coverage[toml]==7.5.1
     # via
     #   -r requirements/test.txt
     #   pytest-cov
+ddt==1.7.2
+    # via -r requirements/test.txt
 dill==0.3.8
     # via pylint
 django==4.2.13
@@ -133,7 +135,7 @@ lazy==1.6
     # via
     #   -r requirements/test.txt
     #   xblock
-lxml[html-clean]==5.2.1
+lxml[html-clean]==5.2.2
     # via
     #   -r requirements/test.txt
     #   edx-i18n-tools
@@ -142,7 +144,7 @@ lxml[html-clean]==5.2.1
     #   xblock-sdk
 lxml-html-clean==0.1.1
     # via -r requirements/test.txt
-mako==1.3.3
+mako==1.3.5
     # via
     #   -r requirements/test.txt
     #   xblock
@@ -179,7 +181,7 @@ pbr==6.0.0
     # via
     #   -r requirements/test.txt
     #   stevedore
-platformdirs==4.2.1
+platformdirs==4.2.2
     # via pylint
 pluggy==1.5.0
     # via
@@ -197,7 +199,7 @@ pygments==2.18.0
     # via
     #   -r requirements/test.txt
     #   rich
-pylint==3.1.0
+pylint==3.2.0
     # via
     #   edx-lint
     #   pylint-celery
