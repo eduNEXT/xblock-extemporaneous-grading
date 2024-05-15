@@ -6,7 +6,7 @@ By default, in edx-platform, the script is loaded in the courseware-chromeless.h
 however, in chromium based browsers, the script is not executed when the content of the
 component changes. So, we need to include the script manually.
 */
-$(function () {
+(function () {
   if (window !== window.parent) {
     document.body.className += " view-in-mfe";
     var contentElement = document.getElementById("content");
