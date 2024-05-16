@@ -181,17 +181,51 @@ class TestXBlockExtemporaneousGrading(TestCase):
         ("12:60", "Invalid time format. The valid format is HH:MM."),
     )
     @unpack
-    def test_validate_time(self, time: str, expected_exception: str | None):
+    def test_validate_time_format(self, time: str, expected_exception: str | None):
         """
-        Test `validate_time` method.
+        Test `validate_time_format` method.
 
         Expected result: the correct exception.
         """
         if expected_exception is None:
-            self.block.validate_time(time)
+            self.block.validate_time_format(time)
         else:
             with self.assertRaises(JsonHandlerError) as context:
-                self.block.validate_time(time)
+                self.block.validate_time_format(time)
+            self.assertEqual(str(context.exception.message), expected_exception)
+
+    @data(
+        (
+            {},
+            None,
+        ),
+        (
+            {"due_date": "01/01/2024", "due_time": "12:00", "late_due_date": "01/01/2025", "late_due_time": "23:59"},
+            None,
+        ),
+        (
+            {"due_time": "43:21"},
+            "Invalid time format. The valid format is HH:MM.",
+        ),
+        (
+            {"late_due_time": "43:21"},
+            "Invalid time format. The valid format is HH:MM.",
+        ),
+        (
+            {"due_date": "01/01/2024", "due_time": "12:00", "late_due_date": "01/01/2023", "late_due_time": "23:59"},
+            "The due date must be before the late due date.",
+        ),
+    )
+    @unpack
+    def test_validate_datetime_fields(self, case_data: dict, expected_exception: str | None):
+        """Test the `validate_datetime_fields` method."""
+        data_dict = {"values": case_data}
+
+        if expected_exception is None:
+            self.block.validate_datetime_fields(data_dict)
+        else:
+            with self.assertRaises(JsonHandlerError) as context:
+                self.block.validate_datetime_fields(data_dict)
             self.assertEqual(str(context.exception.message), expected_exception)
 
     def test_late_submission(self):

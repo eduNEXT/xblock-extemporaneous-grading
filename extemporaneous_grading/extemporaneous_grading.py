@@ -283,17 +283,20 @@ class XBlockExtemporaneousGrading(StudioContainerWithNestedXBlocksMixin, StudioE
         return self.parse_datetime(self.late_due_date, self.late_due_time)
 
     @staticmethod
-    def parse_datetime(date: datetime, time: str) -> datetime:
+    def parse_datetime(date: datetime | str, time: str) -> datetime:
         """
         Parse a datetime object from a date and time string.
 
         Args:
-            date (datetime): The date object.
+            date (datetime | str): The date object or the date string in the format MM/DD/YYYY.
             time (str): The time string in the format HH:MM.
 
         Returns:
             datetime: The datetime object.
         """
+        if isinstance(date, str):
+            date = datetime.strptime(date, "%m/%d/%Y")
+
         time = datetime.strptime(time, "%H:%M").time()
         return datetime.combine(date, time).replace(tzinfo=timezone.utc)
 
@@ -315,26 +318,52 @@ class XBlockExtemporaneousGrading(StudioContainerWithNestedXBlocksMixin, StudioE
         }
 
     @staticmethod
-    def validate_time(time: Optional[str]) -> None:
+    def validate_time_format(time: str) -> None:
         """
         Validate the time format.
 
         Args:
-            time (str, optional): The time string to validate.
+            time (str): The time string to validate.
 
         Raises:
             JsonHandlerError: If the time format is invalid.
         """
-        if time and not re.match(TIME_PATTERN, time):
+        if not re.match(TIME_PATTERN, time):
             raise JsonHandlerError(400, _("Invalid time format. The valid format is HH:MM."))
+
+    def validate_datetime_fields(self, data: dict) -> None:
+        """
+        Validate the datetime fields.
+
+        Args:
+            data (dict): The data received from the client.
+
+        Raises:
+            JsonHandlerError: If the time format is invalid.
+            JsonHandlerError: If the due date is after the late due date.
+        """
+        # pylint: disable=unsubscriptable-object
+        due_time = data["values"].get("due_time") or self.fields["due_time"].default
+        late_due_time = data["values"].get("late_due_time") or self.fields["late_due_time"].default
+
+        self.validate_time_format(due_time)
+        self.validate_time_format(late_due_time)
+
+        due_date = data["values"].get("due_date") or self.fields["due_date"].default
+        late_due_date = data["values"].get("late_due_date") or self.fields["late_due_date"].default
+
+        due_datetime = self.parse_datetime(due_date, due_time)
+        late_due_datetime = self.parse_datetime(late_due_date, late_due_time)
+
+        if due_datetime > late_due_datetime:
+            raise JsonHandlerError(400, _("The due date must be before the late due date."))
 
     @XBlock.json_handler
     def submit_studio_edits(self, data: dict, suffix: str = ""):  # pragma: no cover
         """
         AJAX handler for studio_view() Save button.
         """
-        self.validate_time(data["values"].get("due_time"))
-        self.validate_time(data["values"].get("late_due_time"))
+        self.validate_datetime_fields(data)
 
         values = {}  # dict of new field values we are updating
         to_reset = []  # list of field names to delete from this XBlock

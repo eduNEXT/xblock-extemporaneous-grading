@@ -125,9 +125,13 @@ msgstr "Entrega Tardía"
 msgid "Flag to indicate if the submission is late."
 msgstr "Bandera para indicar si la entrega es tardía."
 
-#: extemporaneous_grading.py:329
+#: extemporaneous_grading.py:332
 msgid "Invalid time format. The valid format is HH:MM."
 msgstr "Formato de hora inválido. El formato válido es HH:MM."
+
+#: extemporaneous_grading.py:359
+msgid "The due date must be before the late due date."
+msgstr "La fecha de entrega debe ser antes de la fecha de entrega tardía."
 
 #: static/html/children.html:4
 msgid "Due Date: "
