@@ -98,8 +98,8 @@ class XBlockExtemporaneousGrading(StudioContainerWithNestedXBlocksMixin, StudioE
         default=_("The late due date has passed. You can not submit this assignment anymore."),
     )
 
-    is_late_submission = Boolean(
-        display_name=_("Is Late Submission"),
+    late_submission = Boolean(
+        display_name=_("Late Submission"),
         help=_("Flag to indicate if the submission is late."),
         scope=Scope.user_state,
         default=False,
@@ -256,7 +256,7 @@ class XBlockExtemporaneousGrading(StudioContainerWithNestedXBlocksMixin, StudioE
         current_datetime = timezone.now()
         if current_datetime > self.late_due_datetime:
             return "late_due_datetime"
-        if self.due_datetime < current_datetime < self.late_due_datetime and not self.is_late_submission:
+        if self.due_datetime < current_datetime < self.late_due_datetime and not self.late_submission:
             return "due_datetime"
         return "children"
 
@@ -296,7 +296,7 @@ class XBlockExtemporaneousGrading(StudioContainerWithNestedXBlocksMixin, StudioE
         return datetime.combine(date, time).replace(tzinfo=timezone.utc)
 
     @XBlock.json_handler
-    def late_submission(self, data: dict, suffix: str = "") -> dict:  # pylint: disable=unused-argument
+    def set_late_submission(self, data: dict, suffix: str = "") -> dict:  # pylint: disable=unused-argument
         """
         Set the late submission flag to True.
 
@@ -307,7 +307,7 @@ class XBlockExtemporaneousGrading(StudioContainerWithNestedXBlocksMixin, StudioE
         Returns:
             dict: The response to the client.
         """
-        self.is_late_submission = True
+        self.late_submission = True
         return {
             "success": True,
         }

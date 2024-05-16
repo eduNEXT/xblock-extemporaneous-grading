@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-15 14:12-0500\n"
+"POT-Creation-Date: 2024-05-16 09:03-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -114,8 +114,8 @@ msgstr ""
 "La fecha de entrega tardía ha pasado. Ya no puedes entregar esta tarea."
 
 #: extemporaneous_grading.py:102
-msgid "Is Late Submission"
-msgstr "Es Entrega Tardía"
+msgid "Late Submission"
+msgstr "Entrega Tardía"
 
 #: extemporaneous_grading.py:103
 msgid "Flag to indicate if the submission is late."

@@ -40,7 +40,7 @@ class TestXBlockExtemporaneousGrading(TestCase):
             scope_ids=ScopeIds("1", "2", "3", "4"),
         )
         self.current_datetime = datetime.now()
-        self.block.is_late_submission = False
+        self.block.late_submission = False
         self.block.due_date = self.current_datetime + timedelta(days=1)
         self.block.due_time = "00:00"
         self.block.late_due_date = self.current_datetime + timedelta(days=2)
@@ -133,10 +133,10 @@ class TestXBlockExtemporaneousGrading(TestCase):
         self.assertEqual(fragment.content.replace("\n", "").replace(" ", ""), "")
 
     @data(
-        ({"due_date": 1, "late_due_date": 2, "is_late_submission": False}, "children"),
-        ({"due_date": -1, "late_due_date": 1, "is_late_submission": False}, "due_datetime"),
-        ({"due_date": -2, "late_due_date": -1, "is_late_submission": False}, "late_due_datetime"),
-        ({"due_date": -1, "late_due_date": 1, "is_late_submission": True}, "children"),
+        ({"due_date": 1, "late_due_date": 2, "late_submission": False}, "children"),
+        ({"due_date": -1, "late_due_date": 1, "late_submission": False}, "due_datetime"),
+        ({"due_date": -2, "late_due_date": -1, "late_submission": False}, "late_due_datetime"),
+        ({"due_date": -1, "late_due_date": 1, "late_submission": True}, "children"),
     )
     @unpack
     def test_get_template_with_ddt(self, case_data: dict, expected_result: str):
@@ -147,7 +147,7 @@ class TestXBlockExtemporaneousGrading(TestCase):
         """
         self.block.late_due_date = self.current_datetime + timedelta(days=case_data["late_due_date"])
         self.block.due_date = self.current_datetime + timedelta(days=case_data["due_date"])
-        self.block.is_late_submission = case_data["is_late_submission"]
+        self.block.late_submission = case_data["late_submission"]
 
         result = self.block.get_template()
 
@@ -196,12 +196,12 @@ class TestXBlockExtemporaneousGrading(TestCase):
 
     def test_late_submission(self):
         """
-        Test `late_submission` handler.
+        Test `set_late_submission` handler.
 
-        Expected result: The field `is_late_submission` is True and the response is a success.
+        Expected result: The field `late_submission` is True and the response is a success.
         """
-        response = self.block.late_submission(self.request)
+        response = self.block.set_late_submission(self.request)
 
-        self.assertEqual(self.block.is_late_submission, True)
+        self.assertEqual(self.block.late_submission, True)
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertEqual(response.json, {"success": True})  # pylint: disable=no-member

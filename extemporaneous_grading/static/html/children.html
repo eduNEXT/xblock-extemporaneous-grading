@@ -17,11 +17,11 @@
 <script type="text/javascript">
     // Each 10 seconds, check if the late due datetime has passed. If so, reload the page.
     setInterval(function () {
-        const isLateSubmission = "{{ block.is_late_submission }}" === "True";
         const now = Date.now();
+        const LateSubmission = "{{ block.late_submission }}" === "True";
         const dueDatetime = Date.parse("{{ due_datetime }}");
         const lateDueDatetime = Date.parse("{{ late_due_datetime }}");
-        if (now > lateDueDatetime || (now > dueDatetime && !isLateSubmission)) {
+        if (now > lateDueDatetime || (now > dueDatetime && !LateSubmission)) {
             window.location.reload();
         }
     }, 10000);

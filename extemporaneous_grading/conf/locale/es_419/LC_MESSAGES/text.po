@@ -114,8 +114,8 @@ msgstr ""
 "La fecha de entrega tardía ha pasado. Ya no puedes entregar esta tarea."
 
 #: extemporaneous_grading.py:102
-msgid "Is Late Submission"
-msgstr "Es Entrega Tardía"
+msgid "Late Submission"
+msgstr "Entrega Tardía"
 
 #: extemporaneous_grading.py:103
 msgid "Flag to indicate if the submission is late."
