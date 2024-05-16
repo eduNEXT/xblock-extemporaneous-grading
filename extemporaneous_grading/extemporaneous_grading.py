@@ -26,7 +26,7 @@ loader = ResourceLoader(__name__)
 TIME_PATTERN = r"^([01][0-9]|2[0-3]):[0-5][0-9]$"
 
 
-@XBlock.needs("i18n", "call_to_action")
+@XBlock.needs("i18n")
 class XBlockExtemporaneousGrading(StudioContainerWithNestedXBlocksMixin, StudioEditableXBlockMixin, XBlock):
     """
     Extemporaneous Grading XBlock.
