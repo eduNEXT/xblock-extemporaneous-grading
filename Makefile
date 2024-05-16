@@ -92,15 +92,19 @@ validate: quality test ## Run tests and quality checks
 ## Localization targets
 
 symlink_translations:
-	if [ ! -d "$(TRANSLATIONS_DIR)" ]; then ln -s conf/locale/ $(TRANSLATIONS_DIR); fi
+	@if [ ! -d "$(TRANSLATIONS_DIR)" ]; then ln -s conf/locale/ $(TRANSLATIONS_DIR); fi
 
 rename_po_files: ## Rename .po files to django.po
-	for locale in $(LOCALES); do \
-        mv $(PACKAGE_NAME)/locale/$$locale/LC_MESSAGES/text.po $(PACKAGE_NAME)/locale/$$locale/LC_MESSAGES/django.po; \
-    done
+	@for locale in $(LOCALES); do \
+		if test -f $(PACKAGE_NAME)/locale/$$locale/LC_MESSAGES/text.po; then \
+			mv $(PACKAGE_NAME)/locale/$$locale/LC_MESSAGES/text.po $(PACKAGE_NAME)/locale/$$locale/LC_MESSAGES/django.po; \
+		else \
+			echo "Creating .po file for $$locale"; \
+		fi; \
+	done
 
 extract_translations: symlink_translations rename_po_files ## Extract strings to be translated, outputting .po files
-	for locale in $(LOCALES); do \
+	@for locale in $(LOCALES); do \
         cd $(PACKAGE_NAME) && django-admin makemessages -l $$locale -v1 -d django --no-obsolete && cd ..; \
 		mv $(PACKAGE_NAME)/locale/$$locale/LC_MESSAGES/django.po $(PACKAGE_NAME)/locale/$$locale/LC_MESSAGES/text.po; \
     done

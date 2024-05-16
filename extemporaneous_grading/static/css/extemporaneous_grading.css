@@ -1,1 +1,11 @@
 /* CSS for XBlockExtemporaneousGrading */
+
+.dates {
+    display: grid;
+    margin: 0 0 15px 0;
+    color: rgb(94, 94, 94);
+}
+
+.dates span {
+    margin: 5px 0;
+}

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-12 00:40-0500\n"
+"POT-Creation-Date: 2024-05-16 14:15-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,14 +17,114 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: extemporaneous_grading.py:33
+#: extemporaneous_grading.py:41
 msgid "Display Name"
 msgstr ""
 
-#: extemporaneous_grading.py:34
+#: extemporaneous_grading.py:42
 msgid "The display name for this component."
 msgstr ""
 
-#: extemporaneous_grading.py:36
+#: extemporaneous_grading.py:44
 msgid "Extemporaneous Grading"
+msgstr ""
+
+#: extemporaneous_grading.py:48
+msgid "Due Date"
+msgstr ""
+
+#: extemporaneous_grading.py:50
+msgid ""
+"The due date for this component. If the learner access it before this date, "
+"the learner will see the content without any restrictions."
+msgstr ""
+
+#: extemporaneous_grading.py:58
+msgid "Due Time (UTC)"
+msgstr ""
+
+#: extemporaneous_grading.py:59
+msgid "The time of the due date. The valid format is HH:MM."
+msgstr ""
+
+#: extemporaneous_grading.py:65
+msgid "Late Due Date"
+msgstr ""
+
+#: extemporaneous_grading.py:67
+msgid ""
+"The late due date for this component. If the learner access it after the due "
+"date and before the late due date, the learner will see a message that the "
+"submission is late. If the learner accepts the late submission by pressing "
+"the button, the learner will see the content. When the late due date passes, "
+"the learner will not be able to see the content."
+msgstr ""
+
+#: extemporaneous_grading.py:78
+msgid "Late Due Time (UTC)"
+msgstr ""
+
+#: extemporaneous_grading.py:79
+msgid "The time of the late due date. The valid format is HH:MM."
+msgstr ""
+
+#: extemporaneous_grading.py:85
+msgid "Due Date Explanation Text"
+msgstr ""
+
+#: extemporaneous_grading.py:86
+msgid ""
+"The explanation text that will be shown to the learner when the due date has "
+"passed."
+msgstr ""
+
+#: extemporaneous_grading.py:89
+msgid ""
+"The due date has passed. You can still submit this assignment until the late "
+"due date. After the late due date, you will not be able to submit this "
+"assignment or see the content. If you accept the late submission, press the "
+"button."
+msgstr ""
+
+#: extemporaneous_grading.py:97
+msgid "Late Due Date Explanation Text"
+msgstr ""
+
+#: extemporaneous_grading.py:98
+msgid ""
+"The explanation text that will be shown to the learner when the late due "
+"date is passed."
+msgstr ""
+
+#: extemporaneous_grading.py:100
+msgid ""
+"The late due date has passed. You can not submit this assignment anymore."
+msgstr ""
+
+#: extemporaneous_grading.py:104
+msgid "Late Submission"
+msgstr ""
+
+#: extemporaneous_grading.py:105
+msgid "Flag to indicate if the submission is late."
+msgstr ""
+
+#: extemporaneous_grading.py:332
+msgid "Invalid time format. The valid format is HH:MM."
+msgstr ""
+
+#: extemporaneous_grading.py:359
+msgid "The due date must be before the late due date."
+msgstr ""
+
+#: static/html/children.html:4
+msgid "Due Date: "
+msgstr ""
+
+#: static/html/children.html:5
+msgid "Late Due Date: "
+msgstr ""
+
+#: static/html/due_datetime.html:4
+msgid "Accept Late Submission"
 msgstr ""

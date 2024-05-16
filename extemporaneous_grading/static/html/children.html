@@ -1,0 +1,26 @@
+{% load i18n %}
+<div class="extemporaneous_grading_block">
+    <div class="dates">
+        <span><b>{% trans "Due Date: " %}</b>{{ block.due_datetime }} UTC</span>
+        <span><b>{% trans "Late Due Date: " %}</b>{{ block.late_due_datetime }} UTC</span>
+    </div>
+    <hr />
+    {% for child_content in children_contents %}
+        {{ child_content|safe }}
+        <br />
+        <hr />
+    {% endfor %}
+</div>
+
+<script type="text/javascript">
+    // Each 10 seconds, check if the late due datetime has passed. If so, reload the page.
+    setInterval(function () {
+        const now = Date.now();
+        const LateSubmission = "{{ block.late_submission }}" === "True";
+        const dueDatetime = Date.parse("{{ due_datetime }}");
+        const lateDueDatetime = Date.parse("{{ late_due_datetime }}");
+        if (now > lateDueDatetime || (now > dueDatetime && !LateSubmission)) {
+            window.location.reload();
+        }
+    }, 10000);
+</script>
