@@ -16,10 +16,20 @@ Unreleased
 
 *
 
-0.1.0 – 2024-05-10
+0.2.0 - 2024-05-16
 **********************************************
 
 Added
 =====
 
-* First release on PyPI.
+* Added extemporaneous grading feature.
+* Added Spanish (es_ES and es_419) translations.
+* Added documentation.
+
+0.1.0 - 2024-05-10
+**********************************************
+
+Added
+=====
+
+* First release.
