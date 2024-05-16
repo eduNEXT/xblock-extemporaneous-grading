@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-16 09:03-0500\n"
+"POT-Creation-Date: 2024-05-16 09:23-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,8 +35,8 @@ msgstr "Fecha de Entrega"
 
 #: extemporaneous_grading.py:50
 msgid ""
-"The due date for this component. If the learner access before this date, the "
-"learner will see the content without any restrictions."
+"The due date for this component. If the learner access it before this date, "
+"the learner will see the content without any restrictions."
 msgstr ""
 "La fecha de entrega para este componente. Si el estudiante accede antes de "
 "esta fecha, verá el contenido sin restricciones."
@@ -55,51 +55,55 @@ msgstr "Fecha de Entrega Tardía"
 
 #: extemporaneous_grading.py:67
 msgid ""
-"The late due date for this component. If the learner access after the due "
+"The late due date for this component. If the learner access it after the due "
 "date and before the late due date, the learner will see a message that the "
-"submission is late. If the learner accepts the late submission pressing the "
-"button, the learner will see the content."
+"submission is late. If the learner accepts the late submission by pressing "
+"the button, the learner will see the content. When the late due date passes, "
+"the learner will not be able to see the content."
 msgstr ""
 "La fecha de entrega tardía para este componente. Si el estudiante accede "
 "después de la fecha de entrega y antes de la fecha de entrega tardía, verá "
 "un mensaje que la entrega es tardía. Si el estudiante acepta la entrega "
-"tardía presionando el botón, verá el contenido."
+"tardía presionando el botón, verá el contenido. Cuando la fecha de entrega "
+"tardía pase, el estudiante no podrá ver el contenido."
 
-#: extemporaneous_grading.py:77
+#: extemporaneous_grading.py:78
 msgid "Late Due Time (UTC)"
 msgstr "Hora de Entrega Tardía (UTC)"
 
-#: extemporaneous_grading.py:78
+#: extemporaneous_grading.py:79
 msgid "The time of the late due date. The valid format is HH:MM."
 msgstr "La hora de la fecha de entrega tardía. El formato válido es HH:MM."
 
-#: extemporaneous_grading.py:84
+#: extemporaneous_grading.py:85
 msgid "Due Date Explanation Text"
 msgstr "Texto Explicativo de la Fecha de Entrega"
 
-#: extemporaneous_grading.py:85
+#: extemporaneous_grading.py:86
 msgid ""
-"The explanation text that will be shown to the learner when the due date is "
+"The explanation text that will be shown to the learner when the due date has "
 "passed."
 msgstr ""
 "El texto explicativo que se mostrará al estudiante cuando la fecha de "
 "entrega haya pasado."
 
-#: extemporaneous_grading.py:88
+#: extemporaneous_grading.py:89
 msgid ""
 "The due date has passed. You can still submit this assignment until the late "
 "due date. After the late due date, you will not be able to submit this "
-"assignment. If you accept the late submission, press the button."
+"assignment or see the content. If you accept the late submission, press the "
+"button."
 msgstr ""
 "La fecha de entrega ha pasado. Aún puedes entregar esta tarea hasta la fecha "
 "de entrega tardía. Después de la fecha de entrega tardía, no podrás entregar "
-"esta tarea. Si aceptas la entrega tardía, presiona el botón."
+"esta tarea o ver el contenido. Si aceptas la entrega tardía, presiona el "
+"botón."
 
-#: extemporaneous_grading.py:95
+#: extemporaneous_grading.py:97
 msgid "Late Due Date Explanation Text"
 msgstr "Texto Explicativo de la Fecha de Entrega Tardía"
 
-#: extemporaneous_grading.py:96
+#: extemporaneous_grading.py:98
 msgid ""
 "The explanation text that will be shown to the learner when the late due "
 "date is passed."
@@ -107,21 +111,21 @@ msgstr ""
 "El texto explicativo que se mostrará al estudiante cuando la fecha de "
 "entrega tardía haya pasado."
 
-#: extemporaneous_grading.py:98
+#: extemporaneous_grading.py:100
 msgid ""
 "The late due date has passed. You can not submit this assignment anymore."
 msgstr ""
 "La fecha de entrega tardía ha pasado. Ya no puedes entregar esta tarea."
 
-#: extemporaneous_grading.py:102
+#: extemporaneous_grading.py:104
 msgid "Late Submission"
 msgstr "Entrega Tardía"
 
-#: extemporaneous_grading.py:103
+#: extemporaneous_grading.py:105
 msgid "Flag to indicate if the submission is late."
 msgstr "Bandera para indicar si la entrega es tardía."
 
-#: extemporaneous_grading.py:327
+#: extemporaneous_grading.py:329
 msgid "Invalid time format. The valid format is HH:MM."
 msgstr "Formato de hora inválido. El formato válido es HH:MM."
 

@@ -47,7 +47,7 @@ class XBlockExtemporaneousGrading(StudioContainerWithNestedXBlocksMixin, StudioE
     due_date = DateTime(
         display_name=_("Due Date"),
         help=_(
-            "The due date for this component. If the learner access before this date, "
+            "The due date for this component. If the learner access it before this date, "
             "the learner will see the content without any restrictions."
         ),
         scope=Scope.settings,
@@ -64,10 +64,11 @@ class XBlockExtemporaneousGrading(StudioContainerWithNestedXBlocksMixin, StudioE
     late_due_date = DateTime(
         display_name=_("Late Due Date"),
         help=_(
-            "The late due date for this component. If the learner access after the due date "
+            "The late due date for this component. If the learner access it after the due date "
             "and before the late due date, the learner will see a message that the submission "
-            "is late. If the learner accepts the late submission pressing the button, the "
-            "learner will see the content."
+            "is late. If the learner accepts the late submission by pressing the button, the "
+            "learner will see the content. When the late due date passes, the learner will not "
+            "be able to see the content."
         ),
         scope=Scope.settings,
         default=datetime.now(),
@@ -82,12 +83,13 @@ class XBlockExtemporaneousGrading(StudioContainerWithNestedXBlocksMixin, StudioE
 
     due_date_explanation_text = String(
         display_name=_("Due Date Explanation Text"),
-        help=_("The explanation text that will be shown to the learner when the due date is passed."),
+        help=_("The explanation text that will be shown to the learner when the due date has passed."),
         scope=Scope.settings,
         default=_(
             "The due date has passed. You can still submit this assignment until the "
             "late due date. After the late due date, you will not be able to submit "
-            "this assignment. If you accept the late submission, press the button."
+            "this assignment or see the content. If you accept the late submission, "
+            "press the button."
         ),
     )
 
