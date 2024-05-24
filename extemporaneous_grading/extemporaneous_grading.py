@@ -2,17 +2,20 @@
 
 from __future__ import annotations
 
+import csv
 import logging
 import re
+import tempfile
 from datetime import datetime
 from typing import Optional
 
 import pkg_resources
+from django.core.files.storage import default_storage
 from django.utils import timezone, translation
 from web_fragments.fragment import Fragment
 from xblock.core import XBlock
 from xblock.exceptions import JsonHandlerError
-from xblock.fields import Boolean, DateTime, JSONField, Scope, String
+from xblock.fields import Boolean, DateTime, JSONField, List, Scope, String
 from xblock.utils.resources import ResourceLoader
 from xblock.utils.studio_editable import FutureFields, StudioContainerWithNestedXBlocksMixin, StudioEditableXBlockMixin
 from xblock.utils.studio_editable import loader as studio_loader
@@ -23,10 +26,14 @@ from extemporaneous_grading.utils import _
 log = logging.getLogger(__name__)
 loader = ResourceLoader(__name__)
 
+ATTR_KEY_USER_ROLE = "edx-platform.user_role"
+ATTR_ANONYMOUS_USER_ID = "edx-platform.anonymous_user_id"
+ATTR_USER_EMAIL = "edx-platform.user_email"
+ATTR_USER_USERNAME = "edx-platform.username"
 TIME_PATTERN = r"^([01][0-9]|2[0-3]):[0-5][0-9]$"
 
 
-@XBlock.needs("i18n")
+@XBlock.needs("user", "i18n")
 class XBlockExtemporaneousGrading(StudioContainerWithNestedXBlocksMixin, StudioEditableXBlockMixin, XBlock):
     """
     Extemporaneous Grading XBlock.
@@ -107,6 +114,16 @@ class XBlockExtemporaneousGrading(StudioContainerWithNestedXBlocksMixin, StudioE
         default=False,
     )
 
+    late_submissions = List(
+        display_name=_("Late Submissions"),
+        help=_(
+            "List of all students who accepted the late submission. Contains "
+            "the anonymous_user_id, username, email, and datetime for each student."
+        ),
+        scope=Scope.user_state_summary,
+        default=[],
+    )
+
     editable_fields = [
         "display_name",
         "due_date",
@@ -144,6 +161,22 @@ class XBlockExtemporaneousGrading(StudioContainerWithNestedXBlocksMixin, StudioE
             str: The rendered template
         """
         return loader.render_django_template(template_path, context, i18n_service=self.runtime.service(self, "i18n"))
+
+    def get_current_user(self):
+        """
+        Get the current user.
+        """
+        return self.runtime.service(self, "user").get_current_user()
+
+    @property
+    def is_course_team(self) -> bool:
+        """
+        Check if the user is part of the course team (instructor or staff).
+        """
+        user = self.get_current_user()
+        is_course_staff = user.opt_attrs.get("edx-platform.user_is_staff")
+        is_instructor = user.opt_attrs.get(ATTR_KEY_USER_ROLE) == "instructor"
+        return is_course_staff or is_instructor
 
     def author_view(self, context: dict) -> Fragment:
         """
@@ -313,8 +346,45 @@ class XBlockExtemporaneousGrading(StudioContainerWithNestedXBlocksMixin, StudioE
             dict: The response to the client.
         """
         self.late_submission = True
+        user = self.get_current_user()
+        self.late_submissions.append(
+            {
+                "anonymous_user_id": user.opt_attrs[ATTR_ANONYMOUS_USER_ID],
+                "username": user.opt_attrs[ATTR_USER_USERNAME],
+                "email": user.emails[0] if user.emails else "",
+                "datetime": timezone.now().isoformat(),
+            }
+        )
         return {
             "success": True,
+        }
+
+    @XBlock.json_handler
+    def download_csv(self, data: dict, suffix: str = "") -> dict:  # pylint: disable=unused-argument
+        """
+        Download a CSV file with all late submissions data.
+
+        Args:
+            data (dict): The data received from the client.
+            suffix (str, optional): The suffix of the handler.
+
+        Returns:
+            dict: The response to the client.
+        """
+        temporary_file = tempfile.NamedTemporaryFile(delete=True, suffix=".csv")
+        csv_name = f"{self.CATEGORY}/late_submissions_{self.scope_ids.usage_id.block_id}.csv"
+
+        with open(temporary_file.name, "w", newline="") as file:
+            writer = csv.writer(file)
+            writer.writerow(["anonymous_user_id", "username", "email", "datetime"])
+            for submission in self.late_submissions:
+                writer.writerow(submission.values())
+
+        default_storage.save(csv_name, temporary_file)
+
+        return {
+            "success": True,
+            "download_url": default_storage.url(csv_name),
         }
 
     @staticmethod

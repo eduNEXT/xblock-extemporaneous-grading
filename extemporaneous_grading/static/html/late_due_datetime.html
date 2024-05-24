@@ -1,4 +1,7 @@
 {% load i18n %}
 <div class="extemporaneous_grading_block">
     <p>{% trans block.late_due_date_explanation_text %}</p>
+    {% if block.is_course_team %}
+        <button id="download_csv">{% trans "Download Late Submissions as a CSV" %}</button>
+    {% endif %}
 </div>
