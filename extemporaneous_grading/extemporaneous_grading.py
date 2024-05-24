@@ -252,8 +252,10 @@ class XBlockExtemporaneousGrading(StudioContainerWithNestedXBlocksMixin, StudioE
         """
         fragment = Fragment()
         children_contents = []
+
         render_context = {
             "block": self,
+            "due_datetime_has_passed": timezone.now() > self.due_datetime,
             "due_datetime": self.due_datetime.isoformat(),
             "late_due_datetime": self.late_due_datetime.isoformat(),
             **context,
