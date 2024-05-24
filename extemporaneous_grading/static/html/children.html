@@ -1,8 +1,11 @@
 {% load i18n %}
 <div class="extemporaneous_grading_block">
     <div class="dates">
-        <span><b>{% trans "Due Date: " %}</b>{{ block.due_datetime }} UTC</span>
-        <span><b>{% trans "Late Due Date: " %}</b>{{ block.late_due_datetime }} UTC</span>
+        {% if not due_datetime_has_passed %}
+            <span><b>{% trans "Due Date: " %}</b>{{ block.due_datetime }} UTC</span>
+        {% else %}
+            <span><b>{% trans "Late Due Date: " %}</b>{{ block.late_due_datetime }} UTC</span>
+        {% endif %}
     </div>
     <hr />
     {% for child_content in children_contents %}
@@ -10,6 +13,9 @@
         <br />
         <hr />
     {% endfor %}
+    {% if block.is_course_team %}
+        <button id="download_csv">{% trans "Download Late Submissions as a CSV" %}</button>
+    {% endif %}
 </div>
 
 <script type="text/javascript">
