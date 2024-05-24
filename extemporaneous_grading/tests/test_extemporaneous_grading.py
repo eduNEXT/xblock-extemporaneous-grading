@@ -16,6 +16,7 @@ from xblock.fields import ScopeIds
 from xblock.test.toy_runtime import ToyRuntime
 
 from extemporaneous_grading import XBlockExtemporaneousGrading
+from extemporaneous_grading.constants import ATTR_ANONYMOUS_USER_ID, ATTR_USER_USERNAME
 
 
 @ddt
@@ -41,12 +42,22 @@ class TestXBlockExtemporaneousGrading(TestCase):
         )
         self.current_datetime = datetime.now()
         self.block.late_submission = False
+        self.block.late_submissions = []
         self.block.due_date = self.current_datetime + timedelta(days=1)
         self.block.due_time = "00:00"
         self.block.late_due_date = self.current_datetime + timedelta(days=2)
         self.block.late_due_time = "00:00"
         self.block.due_date_explanation_text = "Due date explanation text"
         self.block.late_due_date_explanation_text = "Late due date explanation text"
+        self.block.get_current_user = Mock(
+            return_value=Mock(
+                opt_attrs={
+                    ATTR_USER_USERNAME: "test_user",
+                    ATTR_ANONYMOUS_USER_ID: "test_anonymous_user_id",
+                },
+                emails=["test_email"],
+            )
+        )
         self.request = Mock(
             body=json.dumps({}).encode("utf-8"),
             method="POST",

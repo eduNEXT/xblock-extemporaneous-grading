@@ -21,16 +21,16 @@ from xblock.utils.studio_editable import FutureFields, StudioContainerWithNested
 from xblock.utils.studio_editable import loader as studio_loader
 from xblock.validation import Validation
 
+from extemporaneous_grading.constants import (
+    ATTR_ANONYMOUS_USER_ID,
+    ATTR_KEY_USER_ROLE,
+    ATTR_USER_USERNAME,
+    TIME_PATTERN,
+)
 from extemporaneous_grading.utils import _
 
 log = logging.getLogger(__name__)
 loader = ResourceLoader(__name__)
-
-ATTR_KEY_USER_ROLE = "edx-platform.user_role"
-ATTR_ANONYMOUS_USER_ID = "edx-platform.anonymous_user_id"
-ATTR_USER_EMAIL = "edx-platform.user_email"
-ATTR_USER_USERNAME = "edx-platform.username"
-TIME_PATTERN = r"^([01][0-9]|2[0-3]):[0-5][0-9]$"
 
 
 @XBlock.needs("user", "i18n")
