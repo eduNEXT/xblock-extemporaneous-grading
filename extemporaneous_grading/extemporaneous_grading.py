@@ -374,7 +374,7 @@ class XBlockExtemporaneousGrading(StudioContainerWithNestedXBlocksMixin, StudioE
             dict: The response to the client.
         """
         temporary_file = tempfile.NamedTemporaryFile(delete=True, suffix=".csv")
-        csv_name = f"{self.CATEGORY}/late_submissions_{self.scope_ids.usage_id.block_id}.csv"
+        csv_name = f"{self.course_id}_late_responses_from_{self.scope_ids.usage_id}.csv"
 
         with open(temporary_file.name, "w", newline="") as file:
             writer = csv.writer(file)
